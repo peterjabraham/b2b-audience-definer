@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask import Flask, render_template, request, send_from_directory, jsonify, send_file
 from markupsafe import Markup
 import os
 from dotenv import load_dotenv
@@ -6,6 +6,7 @@ import requests
 import json
 import re
 import time
+from io import BytesIO
 
 app = Flask(__name__, static_folder='static')
 
@@ -16,11 +17,29 @@ load_dotenv()
 anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
 
 def format_response(text):
-    # Use regex to wrap each numbered section in HTML tags
-    formatted = re.sub(r'(\d+\.\s*[A-Z\s]+)', r'<h3>\1</h3>', text)
-    # Replace newlines with <br> tags
-    formatted = formatted.replace('\n', '<br>')
-    return formatted
+    # Split the text into sections based on numbered headings
+    sections = []
+    current_section = []
+    
+    for line in text.split('\n'):
+        if re.match(r'^\d+\.\s*[A-Z\s]+', line):
+            if current_section:
+                sections.append('\n'.join(current_section))
+            current_section = [line]
+        else:
+            current_section.append(line)
+    
+    if current_section:
+        sections.append('\n'.join(current_section))
+    
+    # Format each section
+    formatted_sections = []
+    for section in sections:
+        # Format the section content
+        formatted = section.replace('\n', '<br>')
+        formatted_sections.append(f'<div class="section">{formatted}</div>')
+    
+    return '\n'.join(formatted_sections)
 
 def generate_analysis(host_company, industry_vertical, existing_customers, target_industries, competitors, company_size, country):
     messages = [
@@ -149,13 +168,47 @@ def index():
 
         analysis = generate_analysis(host_company, industry_vertical, existing_customers, 
                                   target_industries, competitors, company_size, country)
-        return render_template('result.html', analysis=Markup(analysis))
+        
+        # Split analysis into sections
+        sections = analysis.split('<div class="section">')
+        sections = [s.strip('</div>').strip() for s in sections if s.strip()]
+        
+        return render_template('result.html', sections=sections)
 
     return render_template('index.html')
 
 @app.route('/static/<path:path>')
 def send_static(path):
     return send_from_directory('static', path)
+
+@app.route('/download-results')
+def download_results():
+    if 'sections' not in request.args:
+        return "No results to download", 400
+        
+    sections = json.loads(request.args.get('sections'))
+    
+    # Create text content
+    content = "B2B Audience Analysis Results\n\n"
+    
+    for i, section in enumerate(sections, 1):
+        # Remove HTML tags
+        clean_text = re.sub(r'<[^>]+>', '', section['content'])
+        # Add section title and content
+        content += f"{i}. {section['title']}\n"
+        content += f"{clean_text.strip()}\n\n"
+    
+    # Create BytesIO object
+    buffer = BytesIO()
+    buffer.write(content.encode('utf-8'))
+    buffer.seek(0)
+    
+    return send_file(
+        buffer,
+        mimetype='text/plain',
+        as_attachment=True,
+        download_name='b2b_audience_analysis.txt'
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
