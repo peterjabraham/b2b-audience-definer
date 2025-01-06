@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Audience Analysis Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
+        .error {
+            color: #ff6b6b;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>B2B Audience Analysis Form</h1>
+    <form method="POST">
+        <label for="host_company">Host Company:</label>
+        <input type="text" id="host_company" name="host_company" required>
+        {% if errors and errors.host_company %}
+            <p class="error">{{ errors.host_company }}</p>
+        {% endif %}
+
+        <label for="industry_vertical">Industry Vertical:</label>
+        <input type="text" id="industry_vertical" name="industry_vertical" required>
+        {% if errors and errors.industry_vertical %}
+            <p class="error">{{ errors.industry_vertical }}</p>
+        {% endif %}
+
+        <label for="existing_customers">Existing Customers:</label>
+        <textarea id="existing_customers" name="existing_customers"></textarea>
+
+        <label for="target_industries">Target Industries:</label>
+        <textarea id="target_industries" name="target_industries"></textarea>
+
+        <label for="competitors">Competitors:</label>
+        <textarea id="competitors" name="competitors"></textarea>
+
+        <label for="company_size">Company Size to Target:</label>
+        <input type="text" id="company_size" name="company_size" required>
+        {% if errors and errors.company_size %}
+            <p class="error">{{ errors.company_size }}</p>
+        {% endif %}
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required>
+        {% if errors and errors.country %}
+            <p class="error">{{ errors.country }}</p>
+        {% endif %}
+
+        <input type="submit" value="Submit">
+
+        <body><h6>Please be patient as ours minions runaround like headless chickens for 2 minutes. have faith, your results willl appear here.</h6></body>
+    </form>
+</body>
+</html>
