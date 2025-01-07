@@ -38,6 +38,52 @@
                 opacity: .5;
             }
         }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 280px;
+            background-color: #1e40af;
+            color: white;
+            text-align: left;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.4;
+
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+
+            /* Fade in */
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Arrow */
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent #1e40af transparent;
+        }
     </style>
 </head>
 
@@ -47,56 +93,70 @@
 
         <form id="analysisForm" method="POST" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="host_company">
-                    Host Company:
+                <label class="block text-gray-700 text-sm font-bold mb-2 tooltip" for="host_company">
+                    Host Company
+                    <span class="tooltip-text">Enter your company name or the company you're analyzing. Example: "Acme
+                        Corp" or "Tesla, Inc."</span>
                 </label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="host_company" name="host_company" type="text" required>
             </div>
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="industry_vertical">
-                    Industry Vertical:
+                <label class="block text-gray-700 text-sm font-bold mb-2 tooltip" for="industry_vertical">
+                    Industry Vertical
+                    <span class="tooltip-text">Specify the main industry sector. Example: "Software/Technology",
+                        "Healthcare", "Financial Services"</span>
                 </label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="industry_vertical" name="industry_vertical" type="text" required>
             </div>
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="existing_customers">
-                    Existing Customers:
+                <label class="block text-gray-700 text-sm font-bold mb-2 tooltip" for="existing_customers">
+                    Existing Customers
+                    <span class="tooltip-text">List your current notable customers or types of customers. Example:
+                        "Fortune 500 companies", "Mid-size manufacturing firms", "Tech startups"</span>
                 </label>
                 <textarea
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="existing_customers" name="existing_customers" rows="3"></textarea>
             </div>
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="target_industries">
-                    Target Industries:
+                <label class="block text-gray-700 text-sm font-bold mb-2 tooltip" for="target_industries">
+                    Target Industries
+                    <span class="tooltip-text">List the industries you want to target. Example: "Healthcare providers",
+                        "Financial institutions", "E-commerce companies"</span>
                 </label>
                 <textarea
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="target_industries" name="target_industries" rows="3"></textarea>
             </div>
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="competitors">
-                    Competitors:
+                <label class="block text-gray-700 text-sm font-bold mb-2 tooltip" for="competitors">
+                    Competitors
+                    <span class="tooltip-text">List your main competitors in the market. Example: "Salesforce",
+                        "Oracle", "SAP"</span>
                 </label>
                 <textarea
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="competitors" name="competitors" rows="3"></textarea>
             </div>
             <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="company_size">
-                    Company Size to Target:
+                <label class="block text-gray-700 text-sm font-bold mb-2 tooltip" for="company_size">
+                    Company Size to Target
+                    <span class="tooltip-text">Specify the size of companies you want to target. Example: "50-200
+                        employees", "Enterprise (1000+ employees)", "SMBs"</span>
                 </label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="company_size" name="company_size" type="text" required>
             </div>
             <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="country">
-                    Country:
+                <label class="block text-gray-700 text-sm font-bold mb-2 tooltip" for="country">
+                    Country
+                    <span class="tooltip-text">Enter target country or region. Example: "United States", "European
+                        Union", "Asia Pacific"</span>
                 </label>
                 <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
